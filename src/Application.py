@@ -31,8 +31,8 @@ class Application(tk.Tk):
         self.sidebar.pack(expand=False, side='left', anchor='w')
 
         # Labels
-        self.label_title = tk.Label(self.sidebar, text="Ciência da Computação UFRJ", width=30).grid(row=0, pady=(5, 0), columnspan=2)
-        self.label_source = tk.Label(self.sidebar, text="github.com/mvsantos013/compsoc-simulador-loop-simples", width=30).grid(row=1, pady=(0, 30), columnspan=2)
+        self.label_title = tk.Label(self.sidebar, text="Computadores e Sociedade", width=32).grid(row=0, pady=(5, 0), columnspan=2)
+        self.label_source = tk.Label(self.sidebar, text="Ciência da Computação UFRJ", width=32).grid(row=1, pady=(0, 20), columnspan=2)
         self.label_x = tk.Label(self.sidebar, text="X", width=15, anchor="w").grid(row=2, pady=(5, 0))
         self.label_y = tk.Label(self.sidebar, text="Y", width=15, anchor="w").grid(row=3, pady=(5, 0))
         self.label_delay = tk.Label(self.sidebar, text="Atraso (segundos)", width=15, anchor="w").grid(row=4, pady=(5,0))
