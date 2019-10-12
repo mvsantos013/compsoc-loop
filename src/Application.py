@@ -78,3 +78,122 @@ class Application(tk.Tk):
         # Define texto que mostra valor em tempo real de X e Y
         self.x_text = self.canvas.create_text(40, 30, fill="white", font="Arial 20 bold", text="X=0")
         self.y_text = self.canvas.create_text(120, 30, fill="white", font="Arial 20 bold", text="Y=0")
+
+    def create_simulation(self):
+        ''' Lê os inputs e cria a simulação '''
+        # Valida inputs
+        self.validate_inputs()
+        if self.error_message:
+            return
+
+        x = int(self.input_x.get())
+        y = int(self.input_y.get())
+        delay = float(self.input_delay.get().replace(',', '.'))
+
+        self.input_x.config(state=tk.DISABLED)
+        self.input_y.config(state=tk.DISABLED)
+        self.input_delay.config(state=tk.DISABLED)
+
+        # Cria a bola em sua posição inicial
+        self.ball.reset_pos()
+        self.ball.set_value(x)
+        self.ball.set_delay(delay)
+        self.simulation = Simulation(x, y, self.ball, self.progress)
+
+    def run(self, next_step_only=False):
+        ''' Executa a simulação
+            :param boolean next_step_only: Se verdadeiro executa só uma iteração da simulação
+        '''
+
+        # Cria simulação caso ainda não exista
+        if not self.simulation:
+            self.create_simulation()
+            if not self.simulation:
+                return
+
+        if next_step_only:
+            self.simulation.next_step_only = True
+        else:
+            self.simulation.next_step_only = False
+
+        # Executa simulação
+        self.simulation.run()
+
+        self.after(100, self.render)
+
+    def render(self):
+        ''' Chama repetidamente para verificar estado da simulação '''
+        self.btn_next_step['state'] = tk.DISABLED
+        self.btn_run['state'] = tk.DISABLED
+        self.btn_reset['state'] = tk.DISABLED
+
+        # Atualiza texto de X e Y
+        self.canvas.itemconfig(self.x_text, text='X=' + str(self.simulation.x))
+        self.canvas.itemconfig(self.y_text, text='Y=' + str(self.simulation.y))
+
+        if self.simulation.is_finished():
+            self.btn_next_step['state'] = tk.DISABLED
+            self.btn_run['state'] = tk.DISABLED
+            self.btn_reset['state'] = tk.NORMAL
+            return
+
+        if self.simulation.is_paused():
+            self.btn_next_step['state'] = tk.NORMAL
+            self.btn_run['state'] = tk.NORMAL
+            self.btn_reset['state'] = tk.NORMAL
+            return
+
+        self.after(100, self.render)
+
+    def reset(self):
+        ''' Reseta estado do simulador '''
+        # Exclui a simulação
+        self.simulation.state = SimulationState.FINISHED
+        self.simulation = None
+
+        # Reinicia posição da bola e progresso
+        self.ball.reset_pos()
+        self.progress['value'] = 0
+
+        # Libera botões
+        self.btn_next_step['state'] = tk.NORMAL
+        self.btn_run['state'] = tk.NORMAL
+        self.btn_reset['state'] = tk.NORMAL
+        self.input_x.config(state=tk.NORMAL)
+        self.input_y.config(state=tk.NORMAL)
+        self.input_delay.config(state=tk.NORMAL)
+
+        # Reseta textos
+        self.canvas.itemconfig(self.x_text, text='X='+str(int(self.input_x.get())))
+        self.canvas.itemconfig(self.y_text, text='Y='+str(int(self.input_y.get())))
+
+    def validate_inputs(self):
+        ''' Valida inputs do usuário e define mensagem de erro caso haja inconsistência '''
+        self.error_message = ''
+
+        if not self.input_x.get().replace('-', '').isdigit():
+            self.error_message = 'X deve ser um número inteiro'
+            self.label_error['text'] = self.error_message
+            return
+
+        if not self.input_y.get().isdigit():
+            self.error_message = 'Y deve ser um número inteiro'
+            self.label_error['text'] = self.error_message
+            return
+
+        if not self.input_delay.get().replace(',', '').replace('.', '').isdigit():
+            self.error_message = 'O atraso deve ser um número'
+            self.label_error['text'] = self.error_message
+            return
+
+        if int(self.input_y.get()) < 0:
+            self.error_message = 'Y deve ser positivo'
+            self.label_error['text'] = self.error_message
+            return
+
+        if float(self.input_delay.get().replace(',', '.')) < 0:
+            self.error_message = 'O atraso deve ser positivo'
+            self.label_error['text'] = self.error_message
+            return
+
+        self.label_error['text'] = ''
