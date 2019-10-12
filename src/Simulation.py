@@ -71,6 +71,23 @@ class SimulationThread(threading.Thread):
                 self.simulation.state = SimulationState.PAUSED
                 continue
 
+    def draw(self):
+        ''' Lógica de movimentação da bola '''
+
+        # A bola se encontra na posição inicial
+        if self.simulation.ball.pos_x == 425 and self.simulation.ball.pos_y == 500:
+            if self.simulation.y > 0:
+                self.simulation.ball.move_to_sideway()
+            else:
+                self.simulation.ball.move_direct_to_end()
+
+        # A bola se encontra em frente ao retorno
+        if self.simulation.ball.pos_x == 335 and self.simulation.ball.pos_y == 280:
+            if self.simulation.x < self.simulation.y:
+                self.simulation.ball.move_around()
+                self.simulation.ball.set_value(self.simulation.x+1)
+            else:
+                self.simulation.ball.move_to_end()
 
 
 class SimulationState(Enum):
