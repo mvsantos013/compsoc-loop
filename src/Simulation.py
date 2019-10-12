@@ -19,6 +19,8 @@ class Simulation:
 
     def run(self):
         ''' Inicia a simulação '''
+        if self.state == SimulationState.READY:
+            SimulationThread(self).start()
         self.state = SimulationState.RUNNING
 
     def is_ready(self):
@@ -32,6 +34,43 @@ class Simulation:
     def is_paused(self):
         ''' Retorna verdadeiro se a simualação está pausada '''
         return self.state == SimulationState.PAUSED
+
+
+class SimulationThread(threading.Thread):
+    ''' Thread da simulação que contém o loop principal, evita que a aplicação gráfica trave, a simulação é controlada
+        através de seus estados
+    '''
+    def __init__(self, simulation):
+        threading.Thread.__init__(self)
+        self.simulation = simulation
+
+    def run(self):
+        ''' Loop da simulação '''
+
+        while True:
+
+            # Espera ocupada enquanto a simulação está pausada
+            if self.simulation.is_paused():
+                continue
+
+            # Desenha o movimento da bola
+            self.draw()
+
+            # Muda estado da simulação para finalizado caso número máximo de passos atingidos
+            if self.simulation.x == self.simulation.y:
+                self.simulation.state = SimulationState.FINISHED
+                break
+
+            # Atualiza progresso
+            self.simulation.x += 1
+            self.simulation.progress_bar["value"] = self.simulation.x * 100.0 / self.simulation.range
+
+            # Pausa simulação caso seja para andar só um passo
+            if self.simulation.next_step_only:
+                self.simulation.next_step_only = False
+                self.simulation.state = SimulationState.PAUSED
+                continue
+
 
 
 class SimulationState(Enum):
