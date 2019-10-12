@@ -43,3 +43,46 @@ class Ball:
         self.pos_x = self.initial_pos_x
         self.pos_y = self.initial_pos_y
 
+    def move(self, x, y):
+        ''' Move a bola na pista
+            :param int x: Move a bola para a coordenada x
+            :param int y: Move a bola para a coordenada y
+        '''
+        self.canvas.move(self.ball, x - self.pos_x, y - self.pos_y)
+        self.canvas.move(self.text, x - self.pos_x, y - self.pos_y)
+        self.pos_x = x
+        self.pos_y = y
+        time.sleep(self.move_delay)
+
+    def move_direct_to_end(self):
+        ''' Quando Y é zero a bola vai direto para o fim da pista '''
+        self.move(475, 460)
+        self.move(510, 390)
+        self.move(510, 300)
+        self.move(510, 180)
+        self.move(465, 100)
+        self.move(425, 20)
+
+    def move_to_sideway(self):
+        ''' Move a bola para o início do retorno '''
+        self.move(365, 450)
+        self.move(335, 360)
+        self.move(335, 280)
+
+    def move_around(self):
+        ''' Move a bola através do retorno '''
+        self.move(320, 200)
+        self.move(240, 145)
+        self.move(145, 150)
+        self.move(80, 220)
+        self.move(100, 330)
+        self.move(200, 370)
+        self.move(290, 340)
+        self.move(335, 280)
+
+    def move_to_end(self):
+        ''' Move a bola para o fim da pista '''
+        self.move(335, 190)
+        self.move(355, 130)
+        self.move(405, 80)
+        self.move(425, 20)
