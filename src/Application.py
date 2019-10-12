@@ -31,28 +31,30 @@ class Application(tk.Tk):
         self.sidebar.pack(expand=False, side='left', anchor='w')
 
         # Labels
-        self.label_x = tk.Label(self.sidebar, text="X", width=15, anchor="w").grid(row=0, pady=(5, 0))
-        self.label_y = tk.Label(self.sidebar, text="Y", width=15, anchor="w").grid(row=1, pady=(5, 0))
-        self.label_delay = tk.Label(self.sidebar, text="Atraso (segundos)", width=15, anchor="w").grid(row=2, pady=(5,0))
+        self.label_title = tk.Label(self.sidebar, text="Ciência da Computação UFRJ", width=30).grid(row=0, pady=(5, 0), columnspan=2)
+        self.label_source = tk.Label(self.sidebar, text="github.com/mvsantos013/compsoc-simulador-loop-simples", width=30).grid(row=1, pady=(0, 30), columnspan=2)
+        self.label_x = tk.Label(self.sidebar, text="X", width=15, anchor="w").grid(row=2, pady=(5, 0))
+        self.label_y = tk.Label(self.sidebar, text="Y", width=15, anchor="w").grid(row=3, pady=(5, 0))
+        self.label_delay = tk.Label(self.sidebar, text="Atraso (segundos)", width=15, anchor="w").grid(row=4, pady=(5,0))
         self.label_error = tk.Label(self.sidebar, text="", fg="red", width=30, anchor="w")
-        self.label_error.grid(row=5, pady=(10,0), columnspan=2)
+        self.label_error.grid(row=7, pady=(10,0), columnspan=2)
 
         # Inputs
         self.input_x = tk.Entry(self.sidebar, textvariable=tk.StringVar(self, value='0'))
-        self.input_x.grid(row=0, column=1, pady=(5, 0))
+        self.input_x.grid(row=2, column=1, pady=(5, 0))
         self.input_x.focus_set()
         self.input_y = tk.Entry(self.sidebar, textvariable=tk.StringVar(self, value='5'))
-        self.input_y.grid(row=1, column=1, pady=(5, 0))
+        self.input_y.grid(row=3, column=1, pady=(5, 0))
         self.input_delay = tk.Entry(self.sidebar, textvariable=tk.StringVar(self, value='0.5'))
-        self.input_delay.grid(row=2, column=1, pady=(5, 0))
+        self.input_delay.grid(row=4, column=1, pady=(5, 0))
 
         # Botões
         self.btn_run = tk.Button(self.sidebar, text='Executar tudo', width="16", command=self.run)
-        self.btn_run.grid(row=3, column=1, pady=(15, 0), sticky="w")
+        self.btn_run.grid(row=5, column=1, pady=(15, 0), sticky="w")
         self.btn_next_step = tk.Button(self.sidebar, text='Próximo passo', width="16", command=lambda:self.run(next_step_only=True))
-        self.btn_next_step.grid(row=3, column=0, pady=(15, 0), padx=(0, 6), sticky="w")
+        self.btn_next_step.grid(row=5, column=0, pady=(15, 0), padx=(0, 6), sticky="w")
         self.btn_reset = tk.Button(self.sidebar, text='Resetar', width="16", command=self.reset)
-        self.btn_reset.grid(row=4, column=0, pady=(5, 0), sticky="w")
+        self.btn_reset.grid(row=6, column=0, pady=(5, 0), sticky="w")
 
         # Barra de progresso
         self.stateBar = tk.Frame(self, bg='#f2f2f2', relief='sunken', borderwidth=0, padx="1", pady="1")
