@@ -193,6 +193,11 @@ class Application(tk.Tk):
             self.label_error['text'] = self.error_message
             return
 
+        if self.input_x.get() > self.input_y.get():
+            self.error_message = 'X não deve ser maior que Y'
+            self.label_error['text'] = self.error_message
+            return
+
         if float(self.input_delay.get().replace(',', '.')) < 0:
             self.error_message = 'O atraso deve ser positivo'
             self.label_error['text'] = self.error_message
