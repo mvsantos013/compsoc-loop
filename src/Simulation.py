@@ -56,14 +56,18 @@ class SimulationThread(threading.Thread):
             # Desenha o movimento da bola
             self.draw()
 
+            # Atualiza progresso
+            if self.simulation.y == 0:
+                self.simulation.progress_bar["value"] = 100
+            else:
+                self.simulation.progress_bar["value"] = (self.simulation.x + 1) * 100.0 / (self.simulation.range + 1)
+
             # Muda estado da simulação para finalizado caso número máximo de passos atingidos
-            if self.simulation.x == self.simulation.y:
+            if self.simulation.x >= self.simulation.y:
                 self.simulation.state = SimulationState.FINISHED
                 break
 
-            # Atualiza progresso
             self.simulation.x += 1
-            self.simulation.progress_bar["value"] = self.simulation.x * 100.0 / self.simulation.range
 
             # Pausa simulação caso seja para andar só um passo
             if self.simulation.next_step_only:
